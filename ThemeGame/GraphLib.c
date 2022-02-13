@@ -1,7 +1,21 @@
 #include <stdlib.h>
 #include <math.h>
 
-short int** initGraph(int nodeCount) {
+short int** initEmptyGraph(int nodeCount) {
+	short int** graph;
+	graph = (short int**)malloc(nodeCount * sizeof(short int*));
+	for (size_t i = 0; i < nodeCount; i++)
+	{
+		graph[i] = (short int*) malloc(nodeCount * sizeof(short int));
+		for (size_t j = 0; j < nodeCount; j++)
+		{
+			graph[i][j] = 0;
+		}
+	}
+	return graph;
+}
+
+short int** initRandomGraph(int nodeCount) {
 	short int** graph;
 	graph = (short int**)malloc(nodeCount * sizeof(short int*));
 	for (size_t i = 0; i < nodeCount; i++)
@@ -9,7 +23,7 @@ short int** initGraph(int nodeCount) {
 		graph[i] = (short int*)malloc(nodeCount * sizeof(short int));
 		for (size_t j = 0; j < nodeCount; j++)
 		{
-			graph[i][j] = 0;
+			graph[i][j] = rand() % 2;
 		}
 	}
 	return graph;
