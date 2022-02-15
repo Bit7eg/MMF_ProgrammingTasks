@@ -1,12 +1,14 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <time.h>
+#include "GraphLib.h"
 
-short int** initEmptyGraph(int nodeCount) {
-	short int** graph;
-	graph = (short int**)malloc(nodeCount * sizeof(short int*));
+GRAPH initEmptyGraph(int nodeCount) {
+	GRAPH graph;
+	graph = malloc(nodeCount * nodeCount * sizeof(short int));
 	for (size_t i = 0; i < nodeCount; i++)
 	{
-		graph[i] = (short int*) malloc(nodeCount * sizeof(short int));
 		for (size_t j = 0; j < nodeCount; j++)
 		{
 			graph[i][j] = 0;
@@ -15,12 +17,12 @@ short int** initEmptyGraph(int nodeCount) {
 	return graph;
 }
 
-short int** initRandomGraph(int nodeCount) {
-	short int** graph;
-	graph = (short int**)malloc(nodeCount * sizeof(short int*));
+GRAPH initRandomGraph(int nodeCount) {
+	srand(time(NULL));
+	GRAPH graph;
+	graph = malloc(nodeCount * nodeCount * sizeof(short int));
 	for (size_t i = 0; i < nodeCount; i++)
 	{
-		graph[i] = (short int*)malloc(nodeCount * sizeof(short int));
 		for (size_t j = 0; j < nodeCount; j++)
 		{
 			graph[i][j] = rand() % 2;
@@ -29,13 +31,13 @@ short int** initRandomGraph(int nodeCount) {
 	return graph;
 }
 
-int getGraphLength(short int** graph) {
+int getGraphLength(GRAPH graph) {
 	int sqrLength;
 	sqrLength = sizeof(graph) / sizeof(short int);
 	return sqrt(sqrLength);
 }
 
-void killGraph(short int** graph) {
+void killGraph(GRAPH graph) {
 	for (size_t i = 0; i < getGraphLength(graph); i++)
 	{
 		free(graph[i]);
@@ -43,49 +45,40 @@ void killGraph(short int** graph) {
 	free(graph);
 }
 
-short int** addNodes(short int** graph, int nodeCount) {
+GRAPH addNodes(GRAPH graph, int nodeCount) {
 	int resLength, graphLength;
 	graphLength = getGraphLength(graph);
 	resLength = graphLength + nodeCount;
 	if (resLength < graphLength) {
 		resLength = INT_MAX;
 	}
-	short int** newGraph;
-	newGraph = (short int**)malloc(resLength * sizeof(short int*));
+	graph = realloc(graph, resLength * resLength * sizeof(short int));
 	for (size_t i = 0; i < graphLength; i++)
 	{
-		newGraph[i] = (short int*)malloc(resLength * sizeof(short int));
-		for (size_t j = 0; j < graphLength; j++)
-		{
-			newGraph[i][j] = graph[i][j];
-		}
 		for (size_t j = graphLength; j < resLength; j++)
 		{
-			newGraph[i][j] = 0;
+			graph[i][j] = 0;
 		}
 	}
 	for (size_t i = graphLength; i < resLength; i++)
 	{
-		newGraph[i] = (short int*)malloc(resLength * sizeof(short int));
 		for (size_t j = 0; j < resLength; j++)
 		{
-			newGraph[i][j] = 0;
+			graph[i][j] = 0;
 		}
 	}
-	killGraph(graph);
-	return newGraph;
+	return graph;
 }
 
-short int** removeNodes(short int** graph, int nodeCount) {
+GRAPH removeNodes(GRAPH graph, int nodeCount) {
 	int resLength;
 	resLength = getGraphLength(graph) - nodeCount;
-	short int** newGraph;
+	GRAPH newGraph;
 	newGraph = NULL;
 	if (resLength > 0) {
-		newGraph = (short int**)malloc(resLength * sizeof(short int*));
+		newGraph = malloc(resLength * resLength * sizeof(short int));
 		for (size_t i = 0; i < resLength; i++)
 		{
-			newGraph[i] = (short int*)malloc(resLength * sizeof(short int));
 			for (size_t j = 0; j < resLength; j++)
 			{
 				newGraph[i][j] = graph[i][j];
@@ -94,4 +87,23 @@ short int** removeNodes(short int** graph, int nodeCount) {
 	}
 	killGraph(graph);
 	return newGraph;
+}
+
+void printGraph(GRAPH graph) {
+	int size = getGraphLength(graph);
+	printf("    ");
+	for (size_t i = 0; i < size; i++)
+	{
+		printf("%3d ", i);
+	}
+	printf("\n");
+	for (size_t i = 0; i < size; i++)
+	{
+		printf("%3d ", i);
+		for (size_t j = 0; j < size; j++)
+		{
+			printf("%3hd ", graph[i][j]);
+		}
+		printf("\n");
+	}
 }
