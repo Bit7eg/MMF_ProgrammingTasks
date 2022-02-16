@@ -5,6 +5,10 @@ int main()
     int minute, hour, passed_minutes = 0;
     scanf("%i%i", &hour, &minute);
     hour = (hour * 5 + minute / 12) % 60;
+    if (minute % 12 >= 6)
+    {
+        hour++;
+    }
     while (hour != minute)
     {
         minute++;
@@ -13,7 +17,7 @@ int main()
         {
             minute = 0;
         }
-        if (minute % 12 == 0)
+        if (minute % 12 == 6)
         {
             hour++;
         }
