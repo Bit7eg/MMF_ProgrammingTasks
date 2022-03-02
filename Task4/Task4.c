@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include <math.h>
 
-const int TEST = 3000;
+const int TEST = 2000;
 
 bool is_simple(int num, int div)
 {
@@ -46,11 +46,11 @@ int main()
 {
 	int num;
 	scanf("%i", &num);
-	if (num > 3)
+	if ((num > 3) && (num % 2 == 0))
 	{
 		print_simple_sum_list(num, num / 2);
 	}
-	else
+	/*else
 	{
 		for (num = 4; num < TEST + 1; num += 2)
 		{
@@ -60,5 +60,5 @@ int main()
 			}
 		}
 		printf("%i", (int)(num > TEST));
-	}
+	}*/
 }

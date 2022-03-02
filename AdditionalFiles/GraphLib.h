@@ -1,7 +1,7 @@
 #ifndef GRAPHLIB_H
 #define GRAPHLIB_H
 
-typedef short int** GRAPH;
+typedef int** GRAPH;
 
 GRAPH initEmptyGraph(int);
 GRAPH initRandomGraph(int);

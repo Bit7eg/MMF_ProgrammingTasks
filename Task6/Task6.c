@@ -12,7 +12,7 @@ void step(int start, int aim)
         multiply++;
         count = 0;
     }
-    //printf("%i -> %i Step: %lli\n", start, aim, count);
+    printf("%i -> %i Step: %lli\n", start, aim, count);
 }
 
 void towers(int start, int aim, int num)
@@ -37,5 +37,5 @@ int main()
     time_t t_count = time(NULL);
     towers(start, aim, num);
     t_count = time(NULL) - t_count;
-    printf("Steps count: %lli * TMP_MAX + %lli\nTime: %lli secons\n", multiply, count, t_count);
+    printf("\nSteps count: %lli * TMP_MAX + %lli\nTime: %lli secons\n", multiply, count, t_count);
 }
