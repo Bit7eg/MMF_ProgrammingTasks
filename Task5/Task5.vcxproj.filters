@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ThemeGraph.c">
+    <ClCompile Include="Task5.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
