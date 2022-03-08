@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
+#include <string.h>
 #include "GraphLib.h"
 
 GRAPH initEmptyGraph(int nodeCount) {
@@ -18,10 +19,95 @@ GRAPH initEmptyGraph(int nodeCount) {
 	return graph;
 }
 
-int getGraphLength(GRAPH graph) {
-	int sqrLength;
-	sqrLength = sizeof(graph[0]) / sizeof(int);
-	return sqrt(sqrLength);
+GRAPH initRandomGraph(int nodeCount) {
+	srand(time(NULL));
+	GRAPH graph;
+	graph = calloc(nodeCount, sizeof(int*));
+	for (size_t i = 0; i < nodeCount; i++)
+	{
+		graph[i] = calloc(nodeCount, sizeof(int));
+		for (size_t j = 0; j < nodeCount; j++)
+		{
+			graph[i][j] = rand() % (INT_MAX - 1);
+		}
+	}
+	return graph;
+}
+
+unsigned int getGraphLength(GRAPH graph) {
+	unsigned int length = 0;
+	while (graph[length] != 0xfdfdfdfd)
+	{
+		length++;
+	}
+	return length;
+}
+
+GRAPH getDistanceMatrix(GRAPH graph) {
+	int nodeCount = getGraphLength(graph);
+	GRAPH resultDistanceMatrix, stepDistanceMatrix;
+	resultDistanceMatrix = calloc(nodeCount, sizeof(int*));
+	stepDistanceMatrix = calloc(nodeCount, sizeof(int*));
+	for (size_t i = 0; i < nodeCount; i++)
+	{
+		resultDistanceMatrix[i] = calloc(nodeCount, sizeof(int));
+		stepDistanceMatrix[i] = calloc(nodeCount, sizeof(int));
+		for (size_t j = 0; j < nodeCount; j++)
+		{
+			if (i==j)
+			{
+				resultDistanceMatrix[i][j] = 0;
+				stepDistanceMatrix[i][j] = 0;
+			}
+			else
+			{
+				if (graph[i][j]!=0)
+				{
+					resultDistanceMatrix[i][j] = graph[i][j];
+					stepDistanceMatrix[i][j] = graph[i][j];
+				}
+				else
+				{
+					resultDistanceMatrix[i][j] = INT_MAX;
+					stepDistanceMatrix[i][j] = INT_MAX;
+				}
+			}
+		}
+	}
+	GRAPH buff = initEmptyGraph(nodeCount);
+	int min, sum;
+	for (size_t k = 2; k < nodeCount; k++)
+	{
+		for (size_t i = 0; i < nodeCount; i++)
+		{
+			for (size_t j = 0; j < nodeCount; j++)
+			{
+				if (i!=j)
+				{
+					min = INT_MAX;
+					for (size_t h = 0; h < nodeCount; h++)
+					{
+						sum = resultDistanceMatrix[i][h] + stepDistanceMatrix[h][j];
+						if ((sum >= 0) && (min > sum))
+						{
+							min = sum;
+						}
+					}
+					buff[i][j] = min;
+				}
+			}
+		}
+		for (size_t i = 0; i < nodeCount; i++)
+		{
+			for (size_t j = 0; j < nodeCount; j++)
+			{
+				resultDistanceMatrix[i][j] = buff[i][j];
+			}
+		}
+	}
+	killGraph(buff);
+	killGraph(stepDistanceMatrix);
+	return resultDistanceMatrix;
 }
 
 void killGraph(GRAPH graph) {
@@ -81,18 +167,25 @@ GRAPH removeNodes(GRAPH graph, int nodeCount) {
 
 void printGraph(GRAPH graph) {
 	int size = getGraphLength(graph);
-	printf("    ");
+	printf("           ");
 	for (size_t i = 0; i < size; i++)
 	{
-		printf("%3i ", i);
+		printf("%10i ", i + 1);
 	}
 	printf("\n");
 	for (size_t i = 0; i < size; i++)
 	{
-		printf("%3i ", i);
+		printf("%10i ", i + 1);
 		for (size_t j = 0; j < size; j++)
 		{
-			printf("%3hi ", graph[i][j]);
+			if (graph[i][j]==INT_MAX)
+			{
+				printf("       inf ");
+			}
+			else
+			{
+				printf("%10i ", graph[i][j]);
+			}
 		}
 		printf("\n");
 	}
