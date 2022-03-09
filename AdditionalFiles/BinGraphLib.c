@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "BinGraphLib.h"
 
-int* a[2];
+int *a[2];
 
 BIN_GRAPH initEmptyBinGraph(int nodeCount)
 {
