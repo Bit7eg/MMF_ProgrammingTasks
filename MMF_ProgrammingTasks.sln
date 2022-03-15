@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		AdditionalFiles\GraphLib.c = AdditionalFiles\GraphLib.c
 		AdditionalFiles\GraphLib.h = AdditionalFiles\GraphLib.h
 		README.md = README.md
+		AdditionalFiles\ValueSetLib.c = AdditionalFiles\ValueSetLib.c
+		AdditionalFiles\ValueSetLib.h = AdditionalFiles\ValueSetLib.h
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ThemeGame", "ThemeGame\ThemeGame.vcxproj", "{40B91575-6A7A-4A51-89E8-A7BB35DC9D14}"
@@ -33,6 +35,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Task6", "Task6\Task6.vcxproj", "{513CCFE3-6EE4-4E89-A6FC-4F6320EDFB94}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Task7", "Task7\Task7.vcxproj", "{18888AB3-9191-41AE-81AF-F185395CDA4D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Task8", "Task8\Task8.vcxproj", "{F40383C2-5D5F-48B7-AA22-101700C02ED0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -130,6 +134,14 @@ Global
 		{18888AB3-9191-41AE-81AF-F185395CDA4D}.Release|x64.Build.0 = Release|x64
 		{18888AB3-9191-41AE-81AF-F185395CDA4D}.Release|x86.ActiveCfg = Release|Win32
 		{18888AB3-9191-41AE-81AF-F185395CDA4D}.Release|x86.Build.0 = Release|Win32
+		{F40383C2-5D5F-48B7-AA22-101700C02ED0}.Debug|x64.ActiveCfg = Debug|x64
+		{F40383C2-5D5F-48B7-AA22-101700C02ED0}.Debug|x64.Build.0 = Debug|x64
+		{F40383C2-5D5F-48B7-AA22-101700C02ED0}.Debug|x86.ActiveCfg = Debug|Win32
+		{F40383C2-5D5F-48B7-AA22-101700C02ED0}.Debug|x86.Build.0 = Debug|Win32
+		{F40383C2-5D5F-48B7-AA22-101700C02ED0}.Release|x64.ActiveCfg = Release|x64
+		{F40383C2-5D5F-48B7-AA22-101700C02ED0}.Release|x64.Build.0 = Release|x64
+		{F40383C2-5D5F-48B7-AA22-101700C02ED0}.Release|x86.ActiveCfg = Release|Win32
+		{F40383C2-5D5F-48B7-AA22-101700C02ED0}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
