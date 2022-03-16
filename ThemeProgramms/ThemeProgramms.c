@@ -51,4 +51,6 @@ int main()
             flag = 1;
         }
     }
+    printf("\nEqual");
+    return 0;
 }
