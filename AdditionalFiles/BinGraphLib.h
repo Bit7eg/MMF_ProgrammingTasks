@@ -20,7 +20,8 @@ node* getNodePointer(BIN_GRAPH, char);
 BIN_GRAPH addNodesBin(BIN_GRAPH, char);
 VALUE_SET getVariableSet(BIN_GRAPH);
 char logicalFragmentResult(BIN_GRAPH, VALUE_SET);
-void scanBinGraph(BIN_GRAPH);
+BIN_GRAPH scanBinGraph();
+BIN_GRAPH fscanBinGraph(const char*);
 void printBinGraph(BIN_GRAPH);
 
 #include "BinGraphLib.c"
