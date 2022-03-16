@@ -1,13 +1,16 @@
 ﻿#include <stdio.h>
+#include <string.h>
 #include "BinGraphLib.h"
 
 int main()
 {
-    BIN_GRAPH fragment1 = initBinGraph(), fragment2 = initBinGraph();
-    printf("First fragment: \n");
-    scanBinGraph(fragment1);
-    printf("\nSecond fragment: \n");
-    scanBinGraph(fragment2);
+    char* fileName;
+    printf("First fragment file name: ");
+    scanf("%s", &fileName);
+    BIN_GRAPH fragment1 = fscanBinGraph(fileName);
+    printf("Second fragment file name: ");
+    scanf("%s", &fileName);
+    BIN_GRAPH fragment2 = fscanBinGraph(fileName);
     VALUE_SET vars = getVariableSet(fragment1), varsBuff = getVariableSet(fragment2);
     if (getVarCount(vars) >= getVarCount(varsBuff))
     {
