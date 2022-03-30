@@ -1,10 +1,1 @@
-﻿
-#include <iostream>
-
-int main()
-{
-    std::cout << "Hello World!/*Not commented \\(-_-)/ artifact here*/\n";
-}
-
-
-
+﻿1234"56/*78"912

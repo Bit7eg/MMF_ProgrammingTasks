@@ -96,5 +96,7 @@ int main()
         }
     }
     printf("Successfully completed");
+    fclose(fin);
+    fclose(fout);
     return 0;
 }
