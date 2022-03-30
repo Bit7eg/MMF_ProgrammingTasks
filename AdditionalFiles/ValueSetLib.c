@@ -35,7 +35,7 @@ varValue* getVarPointerByName(VALUE_SET vars, char name) {
 
 VALUE_SET addVar(VALUE_SET vars, varValue variable) {
 	int size = getVarCount(vars);
-	vars = realloc((size + 1) * sizeof(varValue));
+	vars = realloc(vars, (size + 1) * sizeof(varValue));
 	vars[size - 1] = variable;
 	vars[size].name = '\0';
 	vars[size].value = 0;
