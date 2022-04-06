@@ -4,7 +4,7 @@
 #include "ValueSetLib.h"
 
 BIN_GRAPH initBinGraph() {
-	BIN_GRAPH graph = malloc(sizeof(node));
+	BIN_GRAPH graph = (BIN_GRAPH)malloc(sizeof(node));
 	graph->mark = '\0';
 	graph->minuseNode = NULL;
 	graph->plusNode = NULL;
@@ -65,15 +65,19 @@ node* getNodePointer(BIN_GRAPH graph, char mark) {
 	return NULL;
 }
 
-BIN_GRAPH addNodesBin(BIN_GRAPH graph, char mark) {
+BIN_GRAPH addNodesBin(BIN_GRAPH graph, int count) {
 	int size = getNodeCount(graph) + 1;
-	graph = realloc(graph, (size+1) * sizeof(node));
-	graph[size - 1].mark = mark;
-	graph[size - 1].minuseNode = NULL;
-	graph[size - 1].plusNode = NULL;
-	graph[size].mark = '\0';
-	graph[size].minuseNode = NULL;
-	graph[size].plusNode = NULL;
+	int newSize = size + count;
+	graph = (BIN_GRAPH)realloc(graph, (newSize) * sizeof(node));
+	for (int i = size - 1; i < newSize - 1; i++)
+	{
+		graph[i].mark = '_';
+		graph[i].minuseNode = NULL;
+		graph[i].plusNode = NULL;
+	}
+	graph[newSize - 1].mark = '\0';
+	graph[newSize - 1].minuseNode = NULL;
+	graph[newSize - 1].plusNode = NULL;
 	return graph;
 }
 
@@ -148,30 +152,22 @@ char logicalFragmentResult(BIN_GRAPH graph, VALUE_SET vars) {
 }
 
 BIN_GRAPH scanBinGraph() {
-	char mark, plus, minuse;
+	int index, plus, minuse, size;
+	char mark, plusType, minuseType;
 	node* vmark, * vplus, * vminuse;
 	BIN_GRAPH graph = initBinGraph();
-	scanf("%c%c%c", &mark, &plus, &minuse);
+	scanf("%i %c %c%i %c%i", &index, &mark, &plusType, &plus, &minuseType, &minuse);
 	while ((mark >= 'A') && (mark <= 'Z'))
 	{
-		vmark = getNodePointer(graph, mark);
-		if (vmark == NULL)
-		{
-			graph = addNodesBin(graph, mark);
-			vmark = getNodePointer(graph, mark);
+		size = getNodeCount(graph);
+		if (minuseType == 'v') {
+			if (minuse > size)
+			{
+				graph = addNodesBin(graph, minuse - size);
+				size = minuse;
+			}
 		}
-		vplus = getNodePointer(graph, plus);
-		if (vplus == NULL)
-		{
-			graph = addNodesBin(graph, plus);
-			vplus = getNodePointer(graph, plus);
-		}
-		vminuse = getNodePointer(graph, minuse);
-		if (vminuse == NULL)
-		{
-			graph = addNodesBin(graph, minuse);
-			vminuse = getNodePointer(graph, minuse);
-		}
+
 		vmark->minuseNode = vminuse;
 		vmark->plusNode = vplus;
 		scanf("%c%c%c", &mark, &plus, &minuse);
@@ -180,7 +176,7 @@ BIN_GRAPH scanBinGraph() {
 }
 
 BIN_GRAPH fscanBinGraph(const char* fileName) {
-	char mark, plus, minuse;
+	/*char mark, plus, minuse;
 	node* vmark, * vplus, * vminuse;
 	FILE* fin = fopen(fileName, "r");
 	BIN_GRAPH graph = initBinGraph();
@@ -209,7 +205,7 @@ BIN_GRAPH fscanBinGraph(const char* fileName) {
 		vmark->plusNode = vplus;
 	}
 	fclose(fin);
-	return graph;
+	return graph;*/
 }
 
 void printBinGraph(BIN_GRAPH graph) {
