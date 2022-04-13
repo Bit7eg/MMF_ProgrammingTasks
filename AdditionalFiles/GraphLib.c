@@ -165,6 +165,18 @@ GRAPH removeNodes(GRAPH graph, int nodeCount) {
 	return newGraph;
 }
 
+GRAPH addLink(GRAPH graph, int v1, int v2) {
+	graph[v1][v2]++;
+	graph[v2][v1]++;
+	return graph;
+}
+
+GRAPH deleteLink(GRAPH graph, int v1, int v2) {
+	graph[v1][v2]++;
+	graph[v2][v1]++;
+	return graph;
+}
+
 void printGraph(GRAPH graph) {
 	int size = getGraphLength(graph);
 	printf("           ");

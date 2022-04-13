@@ -5,10 +5,9 @@ void pow3noCycle3(GRAPH graph, size_t size)
 {
     if (size > 3)
     {
-        graph[size - 1][size - 2] = 1;
-        graph[size - 1][size - 1] = 1;
-        graph[size - 2][size - 1] = 1;
-        graph[size - 2][size - 2] = 1;
+        graph = addLink(graph, size - 1, size - 2);
+        graph = addLink(graph, size - 1, size - 1);
+        graph = addLink(graph, size - 2, size - 2);
         pow3noCycle3(graph, size - 2);
     }
     else if (size == 3) {
@@ -16,22 +15,25 @@ void pow3noCycle3(GRAPH graph, size_t size)
     }
     else if (size == 2)
     {
-        graph[0][1] = 1;
-        graph[0][0] = 1;
-        graph[1][0] = 1;
-        graph[1][1] = 1;
+        graph = addLink(graph, 1, 0);
+        graph = addLink(graph, 1, 1);
+        graph = addLink(graph, 0, 0);
     }
     else
     {
+        killGraph(graph);
         graph = NULL;
     }
 }
 
+void tryGenGraph(int size) {
+
+}
+
 int main()
 {
-    int nodeCount = 1;
-    scanf("%i", &nodeCount);
-    GRAPH graph = initEmptyGraph(nodeCount);
-    pow3noCycle3(graph, nodeCount);
-    printGraph(graph);
+    for (int i = 1; i < 15; i+=2)
+    {
+
+    }
 }

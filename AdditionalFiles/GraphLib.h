@@ -11,6 +11,8 @@ GRAPH getDistanceMatrix(GRAPH);
 void killGraph(GRAPH);
 GRAPH addNodes(GRAPH, int);
 GRAPH removeNodes(GRAPH, int);
+GRAPH addLink(GRAPH, int, int);
+GRAPH deleteLink(GRAPH, int, int);
 void printGraph(GRAPH);
 
 #include "GraphLib.c"
