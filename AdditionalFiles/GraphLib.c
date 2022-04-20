@@ -34,17 +34,7 @@ GRAPH initRandomGraph(int nodeCount) {
 	return graph;
 }
 
-unsigned int getGraphLength(GRAPH graph) {
-	unsigned int length = 0;
-	while (graph[length] != 0xfdfdfdfd)
-	{
-		length++;
-	}
-	return length;
-}
-
-GRAPH getDistanceMatrix(GRAPH graph) {
-	int nodeCount = getGraphLength(graph);
+GRAPH getDistanceMatrix(GRAPH graph, int nodeCount) {
 	GRAPH resultDistanceMatrix, stepDistanceMatrix;
 	resultDistanceMatrix = calloc(nodeCount, sizeof(int*));
 	stepDistanceMatrix = calloc(nodeCount, sizeof(int*));
@@ -105,22 +95,21 @@ GRAPH getDistanceMatrix(GRAPH graph) {
 			}
 		}
 	}
-	killGraph(buff);
-	killGraph(stepDistanceMatrix);
+	killGraph(buff, nodeCount);
+	killGraph(stepDistanceMatrix, nodeCount);
 	return resultDistanceMatrix;
 }
 
-void killGraph(GRAPH graph) {
-	for (size_t i = 0; i < getGraphLength(graph); i++)
+void killGraph(GRAPH graph, int size) {
+	for (size_t i = 0; i < size; i++)
 	{
 		free(graph[i]);
 	}
 	free(graph);
 }
 
-GRAPH addNodes(GRAPH graph, int nodeCount) {
-	int resLength, graphLength;
-	graphLength = getGraphLength(graph);
+GRAPH addNodes(GRAPH graph, int graphLength, int nodeCount) {
+	int resLength;
 	resLength = graphLength + nodeCount;
 	if (resLength < graphLength) {
 		resLength = INT_MAX;
@@ -145,9 +134,9 @@ GRAPH addNodes(GRAPH graph, int nodeCount) {
 	return graph;
 }
 
-GRAPH removeNodes(GRAPH graph, int nodeCount) {
+GRAPH removeNodes(GRAPH graph, int size, int nodeCount) {
 	int resLength;
-	resLength = getGraphLength(graph) - nodeCount;
+	resLength = size - nodeCount;
 	GRAPH newGraph;
 	newGraph = NULL;
 	if (resLength > 0) {
@@ -161,7 +150,7 @@ GRAPH removeNodes(GRAPH graph, int nodeCount) {
 			}
 		}
 	}
-	killGraph(graph);
+	killGraph(graph, size);
 	return newGraph;
 }
 
@@ -177,8 +166,7 @@ GRAPH deleteLink(GRAPH graph, int v1, int v2) {
 	return graph;
 }
 
-void printGraph(GRAPH graph) {
-	int size = getGraphLength(graph);
+void printGraph(GRAPH graph, int size) {
 	printf("           ");
 	for (size_t i = 0; i < size; i++)
 	{

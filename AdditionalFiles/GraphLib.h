@@ -6,7 +6,6 @@ typedef int** GRAPH;
 
 GRAPH initEmptyGraph(int);
 GRAPH initRandomGraph(int);
-unsigned int getGraphLength(GRAPH);
 GRAPH getDistanceMatrix(GRAPH);
 void killGraph(GRAPH);
 GRAPH addNodes(GRAPH, int);
