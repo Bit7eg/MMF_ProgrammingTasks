@@ -7,13 +7,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Task1", "Task1\Task1.vcxpro
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2DFFBFEB-4370-4D04-8D47-6C062135CBC9}"
 	ProjectSection(SolutionItems) = preProject
-		AdditionalFiles\BinGraphLib.c = AdditionalFiles\BinGraphLib.c
-		AdditionalFiles\BinGraphLib.h = AdditionalFiles\BinGraphLib.h
 		AdditionalFiles\GraphLib.c = AdditionalFiles\GraphLib.c
 		AdditionalFiles\GraphLib.h = AdditionalFiles\GraphLib.h
 		README.md = README.md
-		AdditionalFiles\ValueSetLib.c = AdditionalFiles\ValueSetLib.c
-		AdditionalFiles\ValueSetLib.h = AdditionalFiles\ValueSetLib.h
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ThemeGame", "ThemeGame\ThemeGame.vcxproj", "{40B91575-6A7A-4A51-89E8-A7BB35DC9D14}"
