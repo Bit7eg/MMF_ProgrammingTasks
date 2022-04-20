@@ -144,7 +144,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="LogicalFragmentAnaliserFunctions.c" />
+    <ClCompile Include="LogicalFragmentGeneratorFunctions.c" />
     <ClCompile Include="ThemeProgramms.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="StringLib.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

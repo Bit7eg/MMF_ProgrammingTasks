@@ -1,40 +1,25 @@
 ﻿#include <stdio.h>
 
-int isLogicalFormula(char* str)
-{
+#include "StringLib.h"
+#include "LogicalFragmentAnaliserFunctions.c"
+#include "LogicalFragmentGeneratorFunctions.c"
 
-}
-
-int isConjunction(char* str)
-{
-
-}
-
-int isMultiplier(char* str)
-{
-
-}
-
-int isVariable(char* str)
-{
-
-}
-
-int isSpaces(char* str) {
-
-}
-
-char* getString()
-{
-    char ch, *str;
-    scanf("%c", &ch);
-    while (ch != '\n')
-    {
-
-    }
-}
+#define DEBUG 1;
 
 int main()
 {
-    
+#if DEBUG
+	String str = initLogicalFormula();
+#else
+	String str = scanString();
+#endif
+
+	if (isLogicalFormula(str))
+	{
+		printf("It is logical formula");
+	}
+	else
+	{
+		printf("It isn't logical formula");
+	}
 }

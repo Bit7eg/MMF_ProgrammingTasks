@@ -18,5 +18,16 @@
     <ClCompile Include="ThemeProgramms.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="LogicalFragmentAnaliserFunctions.c">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="LogicalFragmentGeneratorFunctions.c">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="StringLib.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
