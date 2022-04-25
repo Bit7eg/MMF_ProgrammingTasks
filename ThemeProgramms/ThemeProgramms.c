@@ -1,25 +1,29 @@
 ﻿#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 #include "StringLib.h"
-#include "LogicalFragmentAnaliserFunctions.c"
-#include "LogicalFragmentGeneratorFunctions.c"
+#include "LogicalFragmentAnaliserFunctions.h"
+#include "LogicalFragmentGeneratorFunctions.h"
 
 #define DEBUG 1;
 
 int main()
 {
 #if DEBUG
+	srand(time(NULL));
 	String str = initLogicalFormula();
+	printString(str);
 #else
 	String str = scanString();
-#endif
+#endif //DEBUG
 
 	if (isLogicalFormula(str))
 	{
-		printf("It is logical formula");
+		printf("\nIt is logical formula");
 	}
 	else
 	{
-		printf("It isn't logical formula");
+		printf("\nIt isn't logical formula");
 	}
 }

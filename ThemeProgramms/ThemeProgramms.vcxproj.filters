@@ -24,9 +24,18 @@
     <ClCompile Include="LogicalFragmentGeneratorFunctions.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="StringLib.c">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="StringLib.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="LogicalFragmentAnaliserFunctions.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="LogicalFragmentGeneratorFunctions.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

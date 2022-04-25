@@ -1,13 +1,32 @@
-#ifndef LFANALISER_C
-#define LFANALISER_C
+#include <stdlib.h>
 
 #include "StringLib.h"
+#include "LogicalFragmentAnaliserFunctions.h"
 
 int isLogicalFormula(String str)
 {
+	int brackets = 0;
 	size_t i;
-	for (i = 1; (i < str.size) && !(str.value[i - 1] == 'O' && str.value[i] == 'R'); i++);
-	if (i < str.size - 2)
+	if (str.value[0] == '(')
+	{
+		brackets++;
+	}
+	else if (str.value[0] == ')')
+	{
+		brackets--;
+	}
+	for (i = 1; (i < str.size) && !(str.value[i - 1] == 'O' && str.value[i] == 'R' && brackets == 0); i++)
+	{
+		if (str.value[i] == '(')
+		{
+			brackets++;
+		}
+		else if (str.value[i] == ')')
+		{
+			brackets--;
+		}
+	}
+	if ((i < str.size - 2) && !(str.value[0] == '(' && str.value[str.size - 1] == ')'))
 	{
 		String strBefore = getStringBefore(str, i - 2);
 		String strAfter = getStringAfter(str, i + 1);
@@ -15,7 +34,7 @@ int isLogicalFormula(String str)
 		size_t j;
 		for (j = 0; j < strAfter.size; j++)
 		{
-			if (strAfter.value[i] != ' ')
+			if (strAfter.value[j] != ' ')
 			{
 				break;
 			}
@@ -33,17 +52,39 @@ int isLogicalFormula(String str)
 
 int isConjunction(String str)
 {
+	int brackets = 0;
 	size_t i;
-	for (i = 2; (i < str.size) && !(str.value[i - 2] == 'A' && str.value[i - 1] == 'N' && str.value[i] == 'D'); i++);
-	if (i < str.size - 2)
+	for (i = 0; i < 2; i++)
+	{
+		if (str.value[i] == '(')
+		{
+			brackets++;
+		}
+		else if (str.value[i] == ')')
+		{
+			brackets--;
+		}
+	}
+	for (i = 2; (i < str.size) && !(str.value[i - 2] == 'A' && str.value[i - 1] == 'N' && str.value[i] == 'D' && brackets == 0); i++)
+	{
+		if (str.value[i] == '(')
+		{
+			brackets++;
+		}
+		else if (str.value[i] == ')')
+		{
+			brackets--;
+		}
+	}
+	if ((i < str.size - 2) && !(str.value[0] == '(' && str.value[str.size - 1] == ')'))
 	{
 		String strBefore = getStringBefore(str, i - 3);
 		String strAfter = getStringAfter(str, i + 1);
 		clearString(str);
 		size_t j;
-		for (j = 0; i < strAfter.size; i++)
+		for (j = 0; j < strAfter.size; j++)
 		{
-			if (strAfter.value[i] != ' ')
+			if (strAfter.value[j] != ' ')
 			{
 				break;
 			}
@@ -65,13 +106,8 @@ int isMultiplier(String str)
 		clearString(str);
 		return 0;
 	}
-	if (str.value[0] == 'N')
+	if (str.size >= 5 && str.value[0] == 'N' && str.value[1] == 'O' && str.value[2] == 'T')
 	{
-		if ((str.size < 5) || !(str.value[1] == 'O' && str.value[2] == 'T'))
-		{
-			clearString(str);
-			return 0;
-		}
 		String strAfter = getStringAfter(str, 3);
 		clearString(str);
 		size_t i;
@@ -87,37 +123,23 @@ int isMultiplier(String str)
 		clearString(strAfter);
 		return isSpaces(spaces) && isMultiplier(multiplier);
 	}
-	else if (str.value[0] == '(')
+	else if (str.size >= 3 && str.value[0] == '(' && str.value[str.size - 1] == ')')
 	{
-		if ((str.size < 3) || (str.value[str.size - 1] != ')'))
-		{
-			clearString(str);
-			return 0;
-		}
 		String strBefore = getStringBefore(str, str.size - 2);
 		clearString(str);
 		String formula = getStringAfter(strBefore, 1);
 		clearString(strBefore);
 		return isLogicalFormula(formula);
 	}
-	else if (str.value[0] == 'T')
+	else if (str.size >= 5 && str.value[0] == 'T' && str.value[1] == 'R' && str.value[2] == 'U' && str.value[3] == 'E')
 	{
-		if ((str.size < 5) || !(str.value[1] == 'R' && str.value[2] == 'U' && str.value[3] == 'E'))
-		{
-			clearString(str);
-			return 0;
-		}
 		String spaces = getStringAfter(str, 4);
 		clearString(str);
 		return isSpaces(spaces);
 	}
-	else if (str.value[0] == 'F')
+	else if (str.size >= 6 &&
+		str.value[0] == 'F' && str.value[1] == 'A' && str.value[2] == 'L' && str.value[3] == 'S' && str.value[4] == 'E')
 	{
-		if ((str.size < 6) || !(str.value[1] == 'A' && str.value[2] == 'L' && str.value[3] == 'S' && str.value[4] == 'E'))
-		{
-			clearString(str);
-			return 0;
-		}
 		String spaces = getStringAfter(str, 5);
 		clearString(str);
 		return isSpaces(spaces);
@@ -160,5 +182,3 @@ int isSpaces(String str) {
 	clearString(str);
 	return 1;
 }
-
-#endif

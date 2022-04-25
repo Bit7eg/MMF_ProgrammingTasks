@@ -86,7 +86,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>false</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <CompileAs>CompileAsC</CompileAs>
       <AdditionalIncludeDirectories>..\AdditionalFiles;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -146,9 +146,12 @@
   <ItemGroup>
     <ClCompile Include="LogicalFragmentAnaliserFunctions.c" />
     <ClCompile Include="LogicalFragmentGeneratorFunctions.c" />
+    <ClCompile Include="StringLib.c" />
     <ClCompile Include="ThemeProgramms.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="LogicalFragmentAnaliserFunctions.h" />
+    <ClInclude Include="LogicalFragmentGeneratorFunctions.h" />
     <ClInclude Include="StringLib.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
