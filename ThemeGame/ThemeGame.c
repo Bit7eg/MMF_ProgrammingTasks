@@ -1,84 +1,192 @@
 ﻿#include <stdio.h>
-#include <stdlib.h>
 #include <time.h>
-#include <string.h>
-#include "GraphLib.h"
 
-int inputRes;
-int* nodeMarksTab;
-GRAPH orGraph;
+#define DEBUG 1;
 
-void initGame() {
-    char user_chose;
-    int nodeCount;
-    srand(time(NULL));
-    printf("Do you want to generate game configuration automatically, load it from your config file or enter configuration manualy? g/f/m: ");
-    inputRes = scanf("%c", &user_chose);
-    while ((user_chose != 'g') && (user_chose != 'f') && (user_chose != 'm'))
+struct cell {
+    int number;
+    char letter;
+};
+
+int** generateBoard()
+{
+    int board[8][8], whiteCount = 0, blackCount = 0;
+    for (size_t i = 0; i < 8; i++)
     {
-        printf("Incorrect input!\nPlease, type \'g\' to generate game configuration automatically; type \'f\' to load game configuration from your config file; type \'m\' to enter game configuration manualy. g/f/m: ");
-        inputRes = scanf("%c", &user_chose);
-    }
-    if (user_chose=='g')
-    {
-        nodeCount = rand() % 50 + 1;
-        orGraph = initRandomGraph(nodeCount);
-        nodeMarksTab = malloc((size_t)nodeCount * sizeof(int));
-        for (size_t i = 0; i < nodeCount; i++) nodeMarksTab[i] = 0;
-    }
-    else if (user_chose == 'f') {
-        char* config = malloc(sizeof(char));
-        FILE* fin = NULL;
-        printf("Enter path to config file: ");
-        gets(config);
-        if (config != "") fin = fopen(config, "r");
-        while (fin==NULL)
+        for (size_t j = 0; j < 8; j++)
         {
-            printf("There is some problem opening the file. Check entered path and try again: ");
-            gets(config);
-            if (config != "") fin = fopen(config, "r");
+            if ((i % 2 == j % 2) && (whiteCount < 12 || blackCount < 12))
+            {
+                board[i][j] = rand() % 5 - 2;
+                if (board[i][j] > 0)
+                {
+                    if (whiteCount >= 12)
+                    {
+                        board[i][j] = -board[i][j];
+                        blackCount++;
+                    }
+                    else
+                    {
+                        whiteCount++;
+                    }
+                }
+                else if (board[i][j] < 0)
+                {
+                    if (blackCount >= 12)
+                    {
+                        board[i][j] = -board[i][j];
+                        whiteCount++;
+                    }
+                    else
+                    {
+                        blackCount++;
+                    }
+                }
+            }
+            else
+            {
+                board[i][j] = 0;
+            }
         }
-        inputRes = fscanf(fin, "%i", &nodeCount);
-        orGraph = initEmptyGraph(nodeCount);
-        nodeMarksTab = malloc((size_t)nodeCount * sizeof(int));
-        for (size_t i = 0; i < nodeCount; i++) nodeMarksTab[i] = 0;
-        for (int flag = 0, i = -1, j = -1; flag != EOF; flag = fscanf(fin, "%i%i", &i, &j))
-            if ((i < nodeCount) && (j < nodeCount) && (i >= 0) && (j >= 0)) orGraph[i][j] = 1;
     }
-    else if (user_chose == 'm')
-    {
-        printf("Firstly, enter number of nodes. Then define all links. Enter \"-1 -1\" to finish defining");
-        inputRes = scanf("%i", &nodeCount);
-        orGraph = initEmptyGraph(nodeCount);
-        nodeMarksTab = malloc(nodeCount * sizeof(int));
-        for (size_t i = 0; i < nodeCount; i++) nodeMarksTab[i] = 0;
-        int i, j;
-        inputRes = scanf("%i%i", &i, &j);
-        for (; (i != -1) || (j != -1); inputRes = scanf("%i%i", &i, &j))
-            if ((i < nodeCount) && (j < nodeCount) && (i >= 0) && (j >= 0)) orGraph[i][j] = 1;
+    return board;
+}
 
+int** scanBoard()
+{
+    int board[8][8];
+    for (size_t i = 0; i < 8; i++)
+    {
+        for (size_t j = 0; j < 8; j++)
+        {
+            board[i][j] = 0;
+        }
+    }
+    int i;
+    char j, ch;
+    scanf("%i%c", &i, &j);
+    while (i >= 1 && i <= 8 && j >= 'A' && j <= 'H')
+    {
+        scanf("%i", &ch);
+        if (ch == 'w')
+        {
+            board[i - 1][(int)(j - 'A')] = 1;
+        }
+        else if (ch == 'b')
+        {
+            board[i - 1][(int)(j - 'A')] = -1;
+        }
+        else if (ch == 'W')
+        {
+            board[i - 1][(int)(j - 'A')] = 2;
+        }
+        else if (ch == 'B')
+        {
+            board[i - 1][(int)(j - 'A')] = -2;
+        }
+        scanf("%i%c", &i, &j);
+    }
+    return board;
+}
+
+void printBoard(int board[8][8])
+{
+    printf(" ");
+    for (size_t j = 0; j < 8; j++)
+    {
+        printf(" %c", ((char)j + 'A'));
+    }
+    printf("\n");
+    for (size_t i = 0; i < 8; i++)
+    {
+        printf("%i", i);
+        for (size_t j = 0; j < 8; j++)
+        {
+            printf(" %2i", board[i][j]);
+        }
+        printf("\n");
     }
 }
 
 int main()
 {
-    initGame();
+    int** board;
 
-    printGraph(orGraph);
-    printf("\n");
-    int length = getGraphLength(orGraph);
-    for (size_t i = 0; i < length; i++)
-    {
-        printf("%5d ", i);
-    }
-    printf("\n");
-    for (size_t i = 0; i < length; i++)
-    {
-        printf("%5d ", nodeMarksTab[i]);
-    }
-    printf("\n");
+#if DEBUG
+    board = generateBoard();
+#else
+    board = scanBoard();
+#endif // DEBUG
 
-    killGraph(orGraph);
-    free(nodeMarksTab);
+    printBoard(board);
+    struct cell from = { 0, 0 }, to = { 0, 0 };
+    int fl = 0;
+    for (size_t i = 0; i < 8 && !fl; i++)
+    {
+        for (size_t j = i % 2; j < 8 && !fl; j += 2)
+        {
+            if (board[i][j] > 0)
+            {
+                from.letter = j + 'A';
+                from.number = i + 1;
+                if (i < 7 && j > 0 && board[i + 1][j - 1] == 0)
+                {
+                    to.letter = j - 1 + 'A';
+                    to.number = i + 2;
+                    fl = 1;
+                }
+                else if (i < 7 && j < 7 && board[i + 1][j + 1] == 0)
+                {
+                    to.letter = j + 1 + 'A';
+                    to.number = i + 2;
+                    fl = 1;
+                }
+                else if (i < 6 && j > 1 && board[i + 1][j - 1] < 0 && board[i + 2][j - 2] == 0)
+                {
+                    to.letter = j - 2 + 'A';
+                    to.number = i + 3;
+                    fl = 1;
+                }
+                else if (i < 6 && j < 6 && board[i + 1][j + 1] < 0 && board[i + 2][j + 2] == 0)
+                {
+                    to.letter = j + 2 + 'A';
+                    to.number = i + 3;
+                    fl = 1;
+                }
+                else if (i > 1 && j > 1 && board[i - 1][j - 1] < 0 && board[i - 2][j - 2] == 0)
+                {
+                    to.letter = j - 2 + 'A';
+                    to.number = i - 1;
+                    fl = 1;
+                }
+                else if (i > 1 && j < 6 && board[i - 1][j + 1] < 0 && board[i - 2][j + 2] == 0)
+                {
+                    to.letter = j + 2 + 'A';
+                    to.number = i - 1;
+                    fl = 1;
+                }
+                else if(i > 0 && j > 0 && board[i][j] == 2 && board[i - 1][j - 1] == 0)
+                {
+                    to.letter = j - 1 + 'A';
+                    to.number = i;
+                    fl = 1;
+                }
+                else if (i > 0 && j < 7 && board[i][j] == 2 && board[i - 1][j + 1] == 0)
+                {
+                    to.letter = j + 1 + 'A';
+                    to.number = i;
+                    fl = 1;
+                }
+            }
+        }
+    }
+    if (fl)
+    {
+        printf("One of available move is %c%i -> %c%i", from.letter, from.number, to.letter, to.number);
+    }
+    else
+    {
+        printf("There is no one available move");
+    }
     return 0;
 }
