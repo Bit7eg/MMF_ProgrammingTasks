@@ -143,7 +143,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GraphLib.c" />
     <ClCompile Include="ThemeGraph.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GraphLib.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
