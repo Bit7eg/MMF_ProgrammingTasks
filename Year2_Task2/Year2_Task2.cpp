@@ -13,17 +13,21 @@ int main()
 
     std::cout << "\n__________________________________________________________\n\n\n";
 
-    int val = intList.push(1).push(2).pop();
+    intList.push(1);
+    intList.push(2);
+    int val = intList.pop();
     std::cout << "List contains: { ";
     for (CustomList<int>::Iterator iter = intList.begin(); iter != intList.end(); iter++)
     {
         std::cout << *iter << ", ";
     }
-    std::cout << "\nGets from intList: " << val << "\n";
+    std::cout << "}\nGets from intList: " << val << "\n";
 
     std::cout << "\n__________________________________________________________\n\n\n";
 
-    IntContainer valContainer = containerList.push_back({ 2 }).push_back({ 1 }).pop_back();
+    containerList.push_back({ 2 });
+    containerList.push_back({ 1 });
+    IntContainer valContainer = containerList.pop_back();
     std::cout << "List contains: { ";
     for (CustomList<IntContainer>::Iterator iter = containerList.begin(); iter != containerList.end(); ++iter)
     {
@@ -32,7 +36,7 @@ int main()
     std::cout << "\nGets from list: " << valContainer.data << "\n";
 
     //CustomList<int> copiedList = intList;
-    //copiedList = list;
+    //copiedList = intList;
 
     std::cout << "\n__________________________________________________________\n\n\n";
 }

@@ -3,7 +3,7 @@
 #include <iostream>
 #include <exception>
 
-template<typename T>
+template<class T>
 class CustomList{
 private:
     struct Node {
@@ -26,18 +26,19 @@ private:
     Node* head;
     unsigned int _length;
     
-    CustomList(const CustomList&) = delete;
+    CustomList(const CustomList& list) = delete;
     void operator=(const CustomList&) = delete;
 public:
     class Iterator {
     private:
         Node* current;
-        Iterator() {
-            std::cout << "\nINFO::CustomList::Iterator::Constructor()\n";
-
-            this->current = nullptr;
-        }
     public:
+        Iterator(Node* element) {
+            std::cout << "\nINFO::CustomList::Iterator::Constructor(Node*)\n";
+
+            this->current = element;
+        }
+
         Iterator(const Iterator& iter) {
             std::cout << "\nINFO::CustomList::Iterator::Constructor(const Iterator&)\n";
 
@@ -89,6 +90,7 @@ public:
         std::cout << "\nINFO::CustomList::Constructor()\n";
 
         this->head = nullptr;
+        this->_length = 0;
     }
 
     ~CustomList() {
@@ -97,7 +99,7 @@ public:
         if (this->head != nullptr) delete this->head;
     }
     
-    CustomList push(T data) {
+    void push(T data) {
         std::cout << "\nINFO::CustomList::push(T data)\n";
 
         Node* curr;
@@ -109,16 +111,21 @@ public:
         {
             /* TODO: response to memory overflow */
             std::cerr << "\nERROR::" << e.what() << '\n';
+            return;
         }
         curr->next = this->head;
         this->head = curr;
         this->_length++;
-        return *this;
     }
 
-    CustomList push_back(T data) {
+    void push_back(T data) {
         std::cout << "\nINFO::CustomList::push_back(T data)\n";
 
+        if (this->head == nullptr)
+        {
+            this->push(data);
+            return;
+        }
         Node* curr = this->head;
         while (curr->next != nullptr) {
             curr = curr->next;
@@ -131,9 +138,9 @@ public:
         {
             /* TODO: response to memory overflow */
             std::cerr << "\nERROR::" << e.what() << '\n';
+            return;
         }
         this->_length++;
-        return *this;
     }
     
     T pop() {
@@ -150,7 +157,7 @@ public:
     }
 
     T pop_back() {
-        std::cout << "\nINFO::CustomList::pop()\n";
+        std::cout << "\nINFO::CustomList::pop_back()\n";
 
         if (this->head == nullptr) throw std::exception("List is empty");
         if (this->head->next == nullptr) {
@@ -180,22 +187,18 @@ public:
     Iterator begin() const {
         std::cout << "\nINFO::CustomList::begin()const\n";
 
-        Iterator iter;
-        iter.current = this->head;
-        return iter;
+        return Iterator(this->head);
     }
 
     Iterator getIterator(const unsigned int position) const {
         std::cout << "\nINFO::CustomList::getIterator(const unsigned int)const\n";
 
         if (this->head == nullptr) throw std::exception("List is empty");
-        if (position == 0) return this->begin();
-        Iterator iter;
-        iter.current = this->head;
-        for (size_t i = 1; iter.current->next != nullptr; i++)
+        Iterator iter = Iterator(this->head);
+        for (size_t i = 0; iter != this->end(); i++)
         {
-            iter++;
             if (i == position) return iter;
+            iter++;
         }
         throw std::exception("Not enough elements in the list");
     }
@@ -203,7 +206,7 @@ public:
     Iterator end() const {
         std::cout << "\nINFO::CustomList::end()const\n";
 
-        return Iterator();
+        return Iterator(nullptr);
     }
 
     T& operator[](const int index) {
