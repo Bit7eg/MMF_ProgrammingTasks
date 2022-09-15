@@ -98,6 +98,24 @@ Expression Expression::parseString(CustomString str) {
 	{
 		postfixExpression += stack.pop();
 	}
+
+	Expression result;
+	CustomList<Expression> exprStack;
+	for (int i = 0; i < postfixExpression.length(); i++)
+	{
+		ch = postfixExpression[i];
+		if (operationPriority.find(ch) != operationPriority.end())
+		{
+		}
+		else if (ch >= '0' && ch <= '9')
+		{
+		}
+		else if (ch == '_' || (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z'))
+		{
+		}
+	}
+
+	return result;
 	//TODO: complite string parsing https://habr.com/ru/post/596925/
 }
 
