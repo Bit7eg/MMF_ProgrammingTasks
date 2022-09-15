@@ -11,6 +11,9 @@ int main()
     CustomList<int> intList;
     CustomList<IntContainer> containerList;
 
+    //intList.pop();
+    //containerList.pop_back();
+
     std::cout << "\n__________________________________________________________\n\n\n";
 
     intList.push(1);
@@ -29,7 +32,7 @@ int main()
     containerList.push_back({ 1 });
     IntContainer valContainer = containerList.pop_back();
     std::cout << "List contains: { ";
-    for (CustomList<IntContainer>::Iterator iter = containerList.begin(); iter != containerList.end(); ++iter)
+    for (CustomList<IntContainer>::Iterator iter = containerList.begin(); !(iter == containerList.end()); ++iter)
     {
         std::cout << iter->data << ", ";
     }

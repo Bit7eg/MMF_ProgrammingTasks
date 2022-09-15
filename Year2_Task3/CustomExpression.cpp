@@ -28,16 +28,7 @@ CustomString Expression::getStringNumber(CustomString expression, int& position)
 	return number;
 }
 
-Expression Expression::parseString(CustomString str) {
-	std::map<char, int> operationPriority({
-		std::pair<char, int>('(', 0),
-		std::pair<char, int>('+', 1),
-		std::pair<char, int>('-', 1),
-		std::pair<char, int>('*', 2),
-		std::pair<char, int>('/', 2),
-		std::pair<char, int>('~', 3),
-		});
-
+CustomString Expression::toPostfix(CustomString str, std::map<char, int> operationPriority) {
 	CustomString postfixExpression = "";
 	CustomList<char> stack;
 	char ch, buff;
@@ -45,7 +36,7 @@ Expression Expression::parseString(CustomString str) {
 	{
 		ch = str[i];
 
-		if (ch >= '0' && ch <='9')
+		if (ch >= '0' && ch <= '9')
 		{
 			postfixExpression += Expression::getStringNumber(str, i) + " ";
 		}
@@ -98,14 +89,41 @@ Expression Expression::parseString(CustomString str) {
 	{
 		postfixExpression += stack.pop();
 	}
+	return postfixExpression;
+}
 
+Expression Expression::execOperation(char op, Expression left, Expression right) {
+	switch (op)
+	{
+	case '+': return Add(left, right);
+	case '-': return Sub(left, right);
+	case '*': return Mul(left, right);
+	case '/': return Div(left, right);
+	default:
+		throw std::exception("No such operation");
+	}
+}
+
+Expression Expression::parseString(CustomString str) {
+	std::map<char, int> operationPriority({
+		std::pair<char, int>('(', 0),
+		std::pair<char, int>('+', 1),
+		std::pair<char, int>('-', 1),
+		std::pair<char, int>('*', 2),
+		std::pair<char, int>('/', 2),
+		std::pair<char, int>('~', 3),
+		});
+
+	CustomString postfixExpression = Expression::toPostfix(str);
 	Expression result;
 	CustomList<Expression> exprStack;
+	char ch;
 	for (int i = 0; i < postfixExpression.length(); i++)
 	{
 		ch = postfixExpression[i];
 		if (operationPriority.find(ch) != operationPriority.end())
 		{
+
 		}
 		else if (ch >= '0' && ch <= '9')
 		{
