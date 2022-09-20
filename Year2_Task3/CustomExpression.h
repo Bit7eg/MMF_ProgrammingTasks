@@ -5,7 +5,7 @@
 class Expression {
 	private:
 		static CustomString getStringNumber(CustomString expression, int& position);
-		static CustomString toPostfix(CustomString str, typename std::map<char, int> operationPriority);
+		static CustomString getStringVariable(CustomString expression, int& position);
 		static Expression execOperation(char op, Expression left, Expression right);
 	public:
 		static Expression parseString(CustomString str);
