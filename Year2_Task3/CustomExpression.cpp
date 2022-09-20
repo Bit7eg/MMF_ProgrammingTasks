@@ -68,6 +68,8 @@ Expression Expression::execOperation(char op, Expression left, Expression right)
 }
 
 Expression Expression::parseString(CustomString str) {
+	std::cout << "\nparseString\n";
+
 	std::map<char, int> operationPriority({
 		std::pair<char, int>('(', 0),
 		std::pair<char, int>('+', 1),
@@ -206,14 +208,20 @@ void Expression::print() {
 }
 
 Number::Number() {
+	std::cout << "\nNumber empty constructor\n";
+
 	this->_num = 0.0;
 }
 
 Number::Number(double num) {
+	std::cout << "\nNumber constructor\n";
+
 	this->_num = num;
 }
 
 Expression Number::diff(CustomString variable) {
+	std::cout << "\nNumber diff\n";
+
 	return Number();
 }
 
@@ -223,6 +231,8 @@ void Number::print() {
 
 
 Variable::Variable(CustomString name) {
+	std::cout << "\nVariable constructor\n";
+
 	if(name[0]!='_' && (name[0] < 'A' || name[0] > 'Z') && (name[0] < 'a' || name[0] > 'z'))
 		throw std::exception("Variable name is incorrect");
 	for(size_t i = 1; i < name.length(); i++){
@@ -234,6 +244,8 @@ Variable::Variable(CustomString name) {
 }
 
 Expression Variable::diff(CustomString variable) {
+	std::cout << "\nVariable diff\n";
+
 	if(variable == this->_name)
 		return Number(1.0);
 	return Number();
@@ -245,65 +257,89 @@ void Variable::print() {
 
 
 Add::Add(Expression left, Expression right) {
+	std::cout << "\nAdd constructor\n";
+
 	this->_left = left;
 	this->_right = right;
 }
 
 Expression Add::diff(CustomString variable) {
+	std::cout << "\nAdd diff\n";
+
 	return Add(this->_left.diff(variable), this->_right.diff(variable));
 }
 
 void Add::print() {
+	std::cout << "(";
 	this->_left.print();
 	std::cout<<" + ";
 	this->_right.print();
+	std::cout << "(";
 }
 
 
 Sub::Sub(Expression left, Expression right) {
+	std::cout << "\nSub constructor\n";
+
 	this->_left = left;
 	this->_right = right;
 }
 
 Expression Sub::diff(CustomString variable) {
+	std::cout << "\nSub diff\n";
+
 	return Sub(this->_left.diff(variable), this->_right.diff(variable));
 }
 
 void Sub::print() {
+	std::cout << "(";
 	this->_left.print();
 	std::cout << " - ";
 	this->_right.print();
+	std::cout << ")";
 }
 
 
 Mul::Mul(Expression left, Expression right) {
+	std::cout << "\nMull constructor\n";
+
 	this->_left = left;
 	this->_right = right;
 }
 
 Expression Mul::diff(CustomString variable) {
+	std::cout << "\nMull diff\n";
+
 	return Add(Mul(this->_left.diff(variable), this->_right), Mul(this->_left, this->_right.diff(variable)));
 }
 
 void Mul::print() {
+	std::cout << "(";
 	this->_left.print();
 	std::cout << " * ";
 	this->_right.print();
+	std::cout << ")";
 }
 
 
 Div::Div(Expression left, Expression right) {
+	std::cout << "\nDiv constructor\n";
+
 	this->_left = left;
 	this->_right = right;
 }
 
 Expression Div::diff(CustomString variable) {
+	std::cout << "\nDiv diff\n";
+
 	return Div(Sub(Mul(this->_left.diff(variable), this->_right),
 		Mul(this->_left, this->_right.diff(variable))), Mul(this->_right, this->_right));
 }
 
 void Div::print() {
+	std::cout << "(";
 	this->_left.print();
 	std::cout << " / ";
 	this->_right.print();
+	std::cout << ")";
 }
