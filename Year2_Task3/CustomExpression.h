@@ -3,13 +3,9 @@
 #include "CustomString.h"
 
 class Expression {
-	private:
-		static CustomString getStringNumber(CustomString expression, int& position);
-		static CustomString getStringVariable(CustomString expression, int& position);
-		static Expression execOperation(char op, Expression left, Expression right);
 	public:
-		static Expression parseString(CustomString str);
-		virtual Expression diff(CustomString variable);
+		static Expression* parseString(CustomString str);
+		virtual Expression* diff(CustomString variable);
 		virtual void print();
 };
 
@@ -19,7 +15,7 @@ class Number : public Expression {
 	public:
 		Number();
 		Number(double num);
-		Expression diff(CustomString variable);
+		Expression* diff(CustomString variable);
 		void print();
 };
 
@@ -28,46 +24,50 @@ class Variable : public Expression {
  		CustomString _name;
 	public:
 		Variable(CustomString name);
-		Expression diff(CustomString variable);
+		Expression* diff(CustomString variable);
 		void print();
 };
 
 class Add : public Expression {
 	private:
-		Expression _left;
-		Expression _right;
+		Expression* _left;
+		Expression* _right;
 	public:
-		Add(Expression left, Expression right);
-		Expression diff(CustomString variable);
+		Add(Expression* left, Expression* right);
+		~Add();
+		Expression* diff(CustomString variable);
 		void print();
 };
 
 class Sub : public Expression {
 	private:
-		Expression _left;
-		Expression _right;
+		Expression* _left;
+		Expression* _right;
 	public:
-		Sub(Expression left, Expression right);
-		Expression diff(CustomString variable);
+		Sub(Expression* left, Expression* right);
+		~Sub();
+		Expression* diff(CustomString variable);
 		void print();
 };
 
 class Mul : public Expression {
 	private:
-		Expression _left;
-		Expression _right;
+		Expression* _left;
+		Expression* _right;
 	public:
-		Mul(Expression left, Expression right);
-		Expression diff(CustomString variable);
+		Mul(Expression* left, Expression* right);
+		~Mul();
+		Expression* diff(CustomString variable);
 		void print();
 };
 
 class Div : public Expression {
 	private:
-		Expression _left;
-		Expression _right;
+		Expression* _left;
+		Expression* _right;
 	public:
-		Div(Expression left, Expression right);
-		Expression diff(CustomString variable);
+		Div(Expression* left, Expression* right);
+		~Div();
+		Expression* diff(CustomString variable);
 		void print();
 };

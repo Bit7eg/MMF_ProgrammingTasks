@@ -6,200 +6,61 @@
 #include <utility>
 
 #include "CustomString.h"
-#include "CustomList.h"
 
-CustomString Expression::getStringNumber(CustomString expression, int& position) {
-	CustomString number = "";
-	bool dotFlag = true;
-
-	for (char num; position < expression.length(); position++)
-	{
-		num = expression[position];
-		if (num >= '0' && num <= '9')
-		{
-			number += num;
-		}
-		else if (dotFlag && num == '.')
-		{
-			dotFlag = false;
-			number += num;
-		}
-		else
-		{
-			position--;
-			break;
-		}
-	}
-
-	return number;
-}
-
-CustomString Expression::getStringVariable(CustomString expression, int& position) {
-	CustomString variable = "";
-
-	for (char ch; position < expression.length(); position++)
-	{
-		ch = expression[position];
-		if (ch == '_' || (ch >= 'A' && ch <= 'Z') ||
-			(ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9'))
-		{
-			variable += ch;
-		}
-		else
-		{
-			position--;
-			break;
-		}
-	}
-
-	return variable;
-}
-
-Expression Expression::execOperation(char op, Expression left, Expression right) {
-	switch (op)
-	{
-	case '+': return Add(left, right);
-	case '-': return Sub(left, right);
-	case '*': return Mul(left, right);
-	case '/': return Div(left, right);
-	default:
-		throw std::exception("No such operation");
-	}
-}
-
-Expression Expression::parseString(CustomString str) {
+Expression* Expression::parseString(CustomString str) {
 	std::cout << "\nparseString\n";
 
-	std::map<char, int> operationPriority({
-		std::pair<char, int>('(', 0),
-		std::pair<char, int>('+', 1),
-		std::pair<char, int>('-', 1),
-		std::pair<char, int>('*', 2),
-		std::pair<char, int>('/', 2),
-		std::pair<char, int>('~', 3),
-		});
-
-	CustomString postfixExpression = "";
-	CustomList<char> stack;
-	char ch, buff;
-	for (int i = 0; i < postfixExpression.length(); i++)
+	int start = 0, end = str.length(), op = 0;
+	if (str[start] == '(' && str[end - 1] == ')')
 	{
-		ch = str[i];
-
-		if (ch >= '0' && ch <= '9')
-		{
-			postfixExpression += Expression::getStringNumber(str, i) + " ";
-		}
-		else if (ch == '_' || (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z'))
-		{
-			i++;
-			postfixExpression += (CustomString() + ch) + Expression::getStringVariable(str, i) + " ";
-		}
-		else if (ch == '(')
-		{
-			stack.push(ch);
-		}
-		else if (ch == ')')
-		{
-			if (stack.length() > 0)
-			{
-				buff = stack.pop();
-			}
-			while (stack.length() > 0 && buff != '(') {
-				postfixExpression += buff;
-				buff = stack.pop();
-			}
-		}
-		else if (operationPriority.find(ch) != operationPriority.end())
-		{
-			if (ch == '-' && (i == 0 || (i > 0 && (operationPriority.find(str[i - 1]) != operationPriority.end()))))
-			{
-				ch = '~';
-			}
-			else
-			{
-				if (stack.length() > 0)
-				{
-					buff = stack.pop();
-				}
-				while (operationPriority[buff] >= operationPriority[ch])
-				{
-					postfixExpression += buff;
-					if (stack.length() == 0)
-					{
-						buff = '\0';
-						break;
-					}
-					buff = stack.pop();
-				}
-				if (buff != '\0')
-				{
-					stack.push(buff);
-				}
-			}
-			stack.push(ch);
-		}
+		start++;
+		end--;
 	}
-	while (stack.length() > 0)
+	int openBreakets = 0, closeBreakets = 0;
+	CustomString beforeOp, afterOp;
+	for (int i = start; i < end; i++)
 	{
-		postfixExpression += stack.pop();
-	}
-
-	Expression exprBuff;
-	CustomList<Expression> exprStack;
-	ch = '\0';
-	for (int i = 0; i < postfixExpression.length(); i++)
-	{
-		ch = postfixExpression[i];
-		if (operationPriority.find(ch) != operationPriority.end())
+		if (openBreakets == closeBreakets &&
+			(str[i] == '+' || str[i] == '-' || str[i] == '*' || str[i] == '/'))
 		{
-			if (ch == '~')
-			{
-				if (exprStack.length() > 0)
-				{
-					exprStack.push(execOperation('-', Number(0.0), exprStack.pop()));
-				}
-				else
-				{
-					exprStack.push(execOperation('-', Number(0.0), Number(0.0)));
-				}
-				continue;
-			}
-			
-			if (exprStack.length() > 0)
-			{
-				exprBuff = exprStack.pop();
-			}
-			else
-			{
-				exprBuff = Number(0.0);
-			}
-
-			if (exprStack.length() > 0)
-			{
-				exprStack.push(execOperation(ch, exprStack.pop(), exprBuff));
-			}
-			else
-			{
-				exprStack.push(execOperation(ch, Number(0.0), exprBuff));
-			}
+			beforeOp = afterOp;
+			afterOp = "";
+			op = i;
 		}
-		else if (ch >= '0' && ch <= '9')
+		else
 		{
-			exprStack.push(Number(atof(Expression::getStringNumber(postfixExpression, i))));
-		}
-		else if (ch == '_' || (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z'))
-		{
-			i++;
-			exprStack.push(Variable((CustomString() + ch) + Expression::getStringVariable(postfixExpression, i)));
+			if (str[i] == '(')
+				openBreakets++;
+			else if (str[i] == ')')
+				closeBreakets++;
+			afterOp += str[i];
 		}
 	}
 
-	return exprStack.pop();
-	//TODO: complite string parsing https://habr.com/ru/post/596925/
+	if (op == 0)
+	{
+		if (str[start] >= '0' && str[start] <= '9')
+			return new Number(atof(afterOp));
+		else
+			return new Variable(afterOp);
+	}
+	else
+	{
+		Expression *left = parseString(beforeOp),
+			*right = parseString(afterOp);
+
+		switch (str[op])
+		{
+			case '+': return new Add(left, right);
+			case '-': return new Sub(left, right);
+			case '*': return new Mul(left, right);
+			case '/': return new Div(left, right);
+			default: return new Number();
+		}
+	}
 }
 
-Expression Expression::diff(CustomString variable) {
+Expression* Expression::diff(CustomString variable) {
 	throw std::exception("This is virtual method!");
 }
 
@@ -219,10 +80,10 @@ Number::Number(double num) {
 	this->_num = num;
 }
 
-Expression Number::diff(CustomString variable) {
+Expression* Number::diff(CustomString variable) {
 	std::cout << "\nNumber diff\n";
 
-	return Number();
+	return new Number();
 }
 
 void Number::print() {
@@ -243,12 +104,12 @@ Variable::Variable(CustomString name) {
 	this->_name = name;
 }
 
-Expression Variable::diff(CustomString variable) {
+Expression* Variable::diff(CustomString variable) {
 	std::cout << "\nVariable diff\n";
 
 	if(variable == this->_name)
-		return Number(1.0);
-	return Number();
+		return new Number(1.0);
+	return new Number();
 }
 
 void Variable::print() {
@@ -256,90 +117,95 @@ void Variable::print() {
 }
 
 
-Add::Add(Expression left, Expression right) {
+Add::Add(Expression* left, Expression* right) {
 	std::cout << "\nAdd constructor\n";
 
 	this->_left = left;
 	this->_right = right;
 }
 
-Expression Add::diff(CustomString variable) {
+Add::~Add() {
+	delete this->_left;
+	delete this->_right;
+}
+
+Expression* Add::diff(CustomString variable) {
 	std::cout << "\nAdd diff\n";
 
-	return Add(this->_left.diff(variable), this->_right.diff(variable));
+	return new Add(this->_left->diff(variable), this->_right->diff(variable));
 }
 
 void Add::print() {
 	std::cout << "(";
-	this->_left.print();
+	this->_left->print();
 	std::cout<<" + ";
-	this->_right.print();
-	std::cout << "(";
+	this->_right->print();
+	std::cout << ")";
 }
 
 
-Sub::Sub(Expression left, Expression right) {
+Sub::Sub(Expression* left, Expression* right) {
 	std::cout << "\nSub constructor\n";
 
 	this->_left = left;
 	this->_right = right;
 }
 
-Expression Sub::diff(CustomString variable) {
+Expression* Sub::diff(CustomString variable) {
 	std::cout << "\nSub diff\n";
 
-	return Sub(this->_left.diff(variable), this->_right.diff(variable));
+	return new Sub(this->_left->diff(variable), this->_right->diff(variable));
 }
 
 void Sub::print() {
 	std::cout << "(";
-	this->_left.print();
+	this->_left->print();
 	std::cout << " - ";
-	this->_right.print();
+	this->_right->print();
 	std::cout << ")";
 }
 
 
-Mul::Mul(Expression left, Expression right) {
+Mul::Mul(Expression* left, Expression* right) {
 	std::cout << "\nMull constructor\n";
 
 	this->_left = left;
 	this->_right = right;
 }
 
-Expression Mul::diff(CustomString variable) {
+Expression* Mul::diff(CustomString variable) {
 	std::cout << "\nMull diff\n";
 
-	return Add(Mul(this->_left.diff(variable), this->_right), Mul(this->_left, this->_right.diff(variable)));
+	return new Add(new Mul(this->_left->diff(variable), this->_right), new Mul(this->_left, this->_right->diff(variable)));
 }
 
 void Mul::print() {
 	std::cout << "(";
-	this->_left.print();
+	this->_left->print();
 	std::cout << " * ";
-	this->_right.print();
+	this->_right->print();
 	std::cout << ")";
 }
 
 
-Div::Div(Expression left, Expression right) {
+Div::Div(Expression* left, Expression* right) {
 	std::cout << "\nDiv constructor\n";
 
 	this->_left = left;
 	this->_right = right;
 }
 
-Expression Div::diff(CustomString variable) {
+Expression* Div::diff(CustomString variable) {
 	std::cout << "\nDiv diff\n";
 
-	return Div(Sub(Mul(this->_left.diff(variable), this->_right),
-		Mul(this->_left, this->_right.diff(variable))), Mul(this->_right, this->_right));
+	return new Div(new Sub(new Mul(this->_left->diff(variable), this->_right),
+		new Mul(this->_left, this->_right->diff(variable))), new Mul(this->_right, this->_right));
 }
 
 void Div::print() {
 	std::cout << "(";
-	this->_left.print();
+	this->_left->print();
 	std::cout << " / ";
-	this->_right.print();
+	this->_right->print();
 	std::cout << ")";
 }

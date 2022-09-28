@@ -5,17 +5,17 @@
 
 int main(){
 	CustomString strExpr;
-	char ch = ' ';
-	while (ch != '|')
+	char ch = getchar();
+	while (ch != '\n')
 	{
 		strExpr += ch;
-		std::cin >> ch;
+		ch = getchar();
 	}
-	Expression expr = Expression::parseString(strExpr);
-	Expression difExpr = expr.diff(CustomString("x"));
-	expr.print();
+	Expression* expr = Expression::parseString(strExpr);
+	Expression* difExpr = expr->diff(CustomString("x"));
+	expr->print();
 	std::cout << std::endl;
-	difExpr.print();
+	difExpr->print();
 	std::cout << std::endl;
 
 	return 0;

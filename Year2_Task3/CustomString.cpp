@@ -111,19 +111,24 @@ CustomString CustomString::operator+=(const char character) {
 }
 
 bool CustomString::operator==(const char* data) {
-	return this->_data == data;
+	for (int i = 0; i < this->_length; i++)
+	{
+		if (this->_data[i] != data[i])
+			return false;
+	}
+	return true;
 }
 
 bool CustomString::operator==(CustomString str) {
-	return this->_data == str._data;
+	return *this == (const char*)str;
 }
 
 bool CustomString::operator!=(const char* data) {
-	return this->_data != data;
+	return !(*this == data);
 }
 
 bool CustomString::operator!=(CustomString str) {
-	return this->_data != str._data;
+	return !(*this == str);
 }
 
 char& CustomString::operator[](const int index) {
