@@ -1,4 +1,5 @@
-﻿#include <SFML/Graphics.hpp>
+﻿#include <GLFW\glfw3.h>
+#include <GL\glew.h>
 #include <cmath>
 
 double f(double x) {
